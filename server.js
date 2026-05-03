@@ -1,21 +1,22 @@
 const express = require("express");
 const app = express();
 
-// تخزين بسيط (مؤقت)
+// صفحة رئيسية للتجربة
+app.get("/", (req, res) => {
+  res.send("Server is working 🔥");
+});
+
+// تخزين نقاط
 let users = {};
 
-// ✅ إضافة نقاط (يجي من CPX)
+// استقبال النقاط من CPX
 app.get("/reward", (req, res) => {
   const user = req.query.user_id;
   const reward = parseFloat(req.query.reward || 0);
 
-  if (!user) {
-    return res.send("no user");
-  }
+  if (!user) return res.send("no user");
 
-  if (!users[user]) {
-    users[user] = 0;
-  }
+  if (!users[user]) users[user] = 0;
 
   users[user] += reward;
 
@@ -24,7 +25,7 @@ app.get("/reward", (req, res) => {
   res.send("ok");
 });
 
-// ✅ جلب النقاط
+// عرض النقاط
 app.get("/points", (req, res) => {
   const user = req.query.user_id;
 
@@ -33,8 +34,8 @@ app.get("/points", (req, res) => {
   });
 });
 
-// ✅ مهم لـ Render
+// مهم لـ Render
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log("Server running on port " + PORT);
+  console.log("Running on port " + PORT);
 });
